@@ -1,43 +1,39 @@
 import React from 'react';
-import { Searchbar } from './Searchbar/Searchbar';
-import { ImageGallery } from './ImageGallery/ImageGallery';
-
-const API_KEY = '32648236-214cf230cab87b8c686639ba9';
-const URL = `https://pixabay.com/api/?q=cat&page=1&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+// import axios from 'axios';
+import ImageGallery from './ImageGallery/ImageGallery';
+import { Loader } from './Loader/Loader';
+import Searchbar from './Searchbar/Searchbar';
 
 export default class App extends React.Component {
-  onSubmit = () => {};
+  state = {
+    searchQuery: '',
+  };
+
+  getSearchQuery = searchQuery => {
+    this.setState({ searchQuery });
+  };
+
+  // async componentDidMount() {
+  //   const API_KEY = '32648236-214cf230cab87b8c686639ba9';
+  //   const searchQuery = this.state.searchQuery;
+  //   const URL = `https://pixabay.com/api/?q=${searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+
+  //   this.setState({ isLoading: true });
+
+  //   const response = await axios.get(URL);
+  //   this.setState({ results: response.data.hits, isLoading: false });
+  // }
 
   render() {
     return (
       <div>
-        <Searchbar onSubmit={this.onSubmit}></Searchbar>;
-        <ImageGallery></ImageGallery>;
+        <Searchbar getSearchQuery={this.getSearchQuery}></Searchbar>
+        {this.state.isLoading ? (
+          <Loader></Loader>
+        ) : (
+          <ImageGallery searchQuery={this.state.searchQuery}></ImageGallery>
+        )}
       </div>
     );
   }
 }
-
-//       <ImageGallery >
-//
-//       </ImageGallery>
-
-//       <ImageGalleryItem >
-//
-//       </ImageGalleryItem>
-
-//       <Loader >
-
-//       </Loader>
-
-//       <Button ></Button>
-//       <Modal >
-//       <div class="overlay">
-//   <div class="modal">
-//     <img src="" alt="" />
-//   </div>
-// </div>
-//       </Modal> */}
-//     </div>
-//   );
-// };
