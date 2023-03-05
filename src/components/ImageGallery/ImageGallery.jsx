@@ -4,7 +4,6 @@ import css from './ImageGallery.module.css';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 import { fetchImages } from 'api/fetchImages';
-import { Modal } from 'components/Modal/Modal';
 
 export default class ImageGallery extends React.Component {
   state = {
