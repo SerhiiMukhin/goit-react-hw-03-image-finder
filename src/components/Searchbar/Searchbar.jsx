@@ -12,7 +12,7 @@ export default class Searchbar extends React.Component {
     event.preventDefault();
 
     if (this.state.searchQuery.trim() === '') {
-      alert('Enter something');
+      alert('Please, enter something in the search field');
       return;
     }
 
