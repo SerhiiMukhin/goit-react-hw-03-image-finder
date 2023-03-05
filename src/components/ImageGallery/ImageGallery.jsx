@@ -63,7 +63,7 @@ export default class ImageGallery extends React.Component {
 
   render() {
     if (this.state.status === 'idle') {
-      return <div>Search pictures by name!</div>;
+      return <div className={css.message}>Search pictures by name!</div>;
     }
 
     if (this.state.status === 'pending') {
@@ -89,7 +89,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (this.state.status === 'rejected') {
-      return <div>Something went wrong...</div>;
+      return <div className={css.message}>Ooops, something went wrong... Please, try again</div>;
     }
   }
 }
