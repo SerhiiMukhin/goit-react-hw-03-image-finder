@@ -1,45 +1,87 @@
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import React from 'react';
 import css from './ImageGallery.module.css';
-import axios from 'axios';
+// import axios from 'axios';
 import { Loader } from 'components/Loader/Loader';
+import { Button } from 'components/Button/Button';
+import { fetchImages } from 'api/fetchImages';
 
-const API_KEY = '32648236-214cf230cab87b8c686639ba9';
+// const API_KEY = '32648236-214cf230cab87b8c686639ba9';
 
 export default class ImageGallery extends React.Component {
   state = {
     results: [],
     page: 1,
-    isLoading: false,
+    status: 'idle',
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
-      this.setState({ isLoading: true });
-      axios
-        .get(
-          `https://pixabay.com/api/?q=${this.props.searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-        )
+      this.setState({ status: 'pending' });
+      fetchImages(this.props.searchQuery, this.state.page)
         .then(response => {
-          this.setState({ results: response.data.hits, isLoading: false });
+          if (response.data.total === 0) {
+            return this.setState({ status: 'rejected' });
+          } else {
+            this.setState({
+              status: 'resolved',
+              results: response.data.hits,
+              page: this.state.page + 1,
+            });
+          }
         })
-        .catch(error => console.log(error));
+        .catch(error => this.setState({ error, status: 'rejected' }));
     }
   }
 
+  onLoadMore = () => {
+    this.setState({ status: 'pending' });
+    fetchImages(this.props.searchQuery, this.state.page)
+      .then(response => {
+        if (response.data.total === 0) {
+          return this.setState({ status: 'rejected' });
+        } else {
+          this.setState(prevState => {
+            return {
+              status: 'resolved',
+              results: [...prevState.results, ...response.data.hits],
+              page: this.state.page + 1,
+            };
+          });
+        }
+      })
+      .catch(error => this.setState({ error, status: 'rejected' }));
+  };
+
   render() {
-    return this.state.isLoading ? (
-      <Loader></Loader>
-    ) : (
-      <ul className={css.gallery}>
-        {this.state.results.map(({ largeImageURL, tags, id }) => (
-          <ImageGalleryItem
-            url={largeImageURL}
-            title={tags}
-            key={id}
-          ></ImageGalleryItem>
-        ))}
-      </ul>
-    );
+    if (this.state.status === 'idle') {
+      return <div>Search pictures by name!</div>;
+    }
+
+    if (this.state.status === 'pending') {
+      return <Loader></Loader>;
+    }
+
+    if (this.state.status === 'resolved') {
+      return (
+        <div>
+          <ul className={css.gallery}>
+            {this.state.results.map(({ largeImageURL, tags, id }) => (
+              <ImageGalleryItem
+                url={largeImageURL}
+                title={tags}
+                key={id}
+              ></ImageGalleryItem>
+            ))}
+          </ul>
+          <Button onClick={this.onLoadMore}></Button>
+        </div>
+      );
+    }
+
+    if (this.state.status === 'rejected') {
+      return <div>Something went wrong...</div>;
+    }
   }
 }
