@@ -53,15 +53,10 @@ export default class ImageGallery extends React.Component {
       .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
-  onClick = (event) => {
+  onClick = event => {
     this.setState({ isModalOpen: true });
     console.log(event.currentTarget.src);
-    return (
-      <Modal
-        src={event.currentTarget.src}
-        alt={event.currentTarget.tags}
-      ></Modal>
-    );
+    console.log(event.currentTarget.alt);
   };
 
   render() {
