@@ -11,7 +11,6 @@ export default class ImageGallery extends React.Component {
     page: 1,
     status: 'idle',
     error: null,
-    isModalOpen: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -56,6 +55,12 @@ export default class ImageGallery extends React.Component {
     this.setState({ isModalOpen: true });
     console.log(event.currentTarget.src);
     console.log(event.currentTarget.alt);
+    const modalProps = {
+      src: event.currentTarget.src,
+      alt: event.currentTarget.alt,
+      isModalOpen: true,
+    }
+    this.props.getModal(modalProps)
   };
 
   render() {
