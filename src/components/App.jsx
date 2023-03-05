@@ -1,5 +1,4 @@
 import React from 'react';
-// import axios from 'axios';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Searchbar from './Searchbar/Searchbar';
 

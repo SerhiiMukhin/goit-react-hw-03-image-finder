@@ -1,10 +1,10 @@
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import React from 'react';
 import css from './ImageGallery.module.css';
-// import axios from 'axios';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 import { fetchImages } from 'api/fetchImages';
+import { Modal } from 'components/Modal/Modal';
 
 export default class ImageGallery extends React.Component {
   state = {
@@ -12,6 +12,7 @@ export default class ImageGallery extends React.Component {
     page: 1,
     status: 'idle',
     error: null,
+    isModalOpen: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -52,6 +53,17 @@ export default class ImageGallery extends React.Component {
       .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
+  onClick = (event) => {
+    this.setState({ isModalOpen: true });
+    console.log(event.currentTarget.src);
+    return (
+      <Modal
+        src={event.currentTarget.src}
+        alt={event.currentTarget.tags}
+      ></Modal>
+    );
+  };
+
   render() {
     if (this.state.status === 'idle') {
       return <div>Search pictures by name!</div>;
@@ -70,6 +82,7 @@ export default class ImageGallery extends React.Component {
                 url={largeImageURL}
                 title={tags}
                 key={id}
+                onClick={this.onClick}
               ></ImageGalleryItem>
             ))}
           </ul>
