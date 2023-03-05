@@ -1,6 +1,6 @@
 import React from 'react';
 import ImageGallery from './ImageGallery/ImageGallery';
-import { Modal } from './Modal/Modal';
+import Modal from './Modal/Modal';
 import Searchbar from './Searchbar/Searchbar';
 
 export default class App extends React.Component {
@@ -24,6 +24,12 @@ export default class App extends React.Component {
     });
   };
 
+  closeModal = () => {
+    this.setState(({ isModalOpen }) => ({
+      isModalOpen: !isModalOpen,
+    }));
+  };
+
   render() {
     return (
       <div>
@@ -36,6 +42,7 @@ export default class App extends React.Component {
           <Modal
             src={this.state.modalImgSrc}
             alt={this.state.modalImgAlt}
+            closeModal={this.closeModal}
           ></Modal>
         )}
       </div>

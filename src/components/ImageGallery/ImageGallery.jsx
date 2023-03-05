@@ -53,14 +53,12 @@ export default class ImageGallery extends React.Component {
 
   onClick = event => {
     this.setState({ isModalOpen: true });
-    console.log(event.currentTarget.src);
-    console.log(event.currentTarget.alt);
     const modalProps = {
       src: event.currentTarget.src,
       alt: event.currentTarget.alt,
       isModalOpen: true,
-    }
-    this.props.getModal(modalProps)
+    };
+    this.props.getModal(modalProps);
   };
 
   render() {
