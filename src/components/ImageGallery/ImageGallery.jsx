@@ -6,8 +6,6 @@ import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 import { fetchImages } from 'api/fetchImages';
 
-// const API_KEY = '32648236-214cf230cab87b8c686639ba9';
-
 export default class ImageGallery extends React.Component {
   state = {
     results: [],
