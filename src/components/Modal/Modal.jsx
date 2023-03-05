@@ -1,5 +1,6 @@
 import React from 'react';
 import css from './Modal.module.css';
+import PropTypes from 'prop-types';
 
 export default class Modal extends React.Component {
   componentDidMount() {
@@ -13,14 +14,12 @@ export default class Modal extends React.Component {
   }
 
   closeOnEscape = event => {
-    console.log(event)
     if (event.code === 'Escape') {
       this.props.closeModal();
     }
   };
 
   closeOnClick = event => {
-    console.dir(event.target)
     if (event.target.className === css.overlay) {
       this.props.closeModal();
     }
@@ -36,3 +35,9 @@ export default class Modal extends React.Component {
     );
   }
 }
+
+Modal.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  closeModal: PropTypes.func.isRequired,
+};

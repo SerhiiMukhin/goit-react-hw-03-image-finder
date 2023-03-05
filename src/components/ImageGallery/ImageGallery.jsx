@@ -4,6 +4,7 @@ import css from './ImageGallery.module.css';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 import { fetchImages } from 'api/fetchImages';
+import PropTypes from 'prop-types';
 
 export default class ImageGallery extends React.Component {
   state = {
@@ -15,18 +16,17 @@ export default class ImageGallery extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchQuery !== this.props.searchQuery) {
-      this.setState({ status: 'pending' });
-      fetchImages(this.props.searchQuery, this.state.page)
+      this.setState({ status: 'pending', page: 1 });
+      fetchImages(this.props.searchQuery, 1)
         .then(response => {
           if (response.data.total === 0) {
             return this.setState({ status: 'rejected' });
-          } else {
-            this.setState({
-              status: 'resolved',
-              results: response.data.hits,
-              page: this.state.page + 1,
-            });
           }
+          this.setState({
+            status: 'resolved',
+            results: response.data.hits,
+            page: this.state.page + 1,
+          });
         })
         .catch(error => this.setState({ error, status: 'rejected' }));
     }
@@ -92,4 +92,9 @@ export default class ImageGallery extends React.Component {
       return <div>Something went wrong...</div>;
     }
   }
+}
+
+ImageGallery.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  getModal: PropTypes.func.isRequired,
 }
